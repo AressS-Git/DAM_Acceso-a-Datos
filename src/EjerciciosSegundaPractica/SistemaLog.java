@@ -127,4 +127,5 @@ public class SistemaLog {
         log.escribirLog("Error de conexión", NivelLog.ERROR);
         log.escribirLog("Intento de acceso fallido", NivelLog.WARNING);
     }
+    //Línea para comprobar cambio de cuenta GitHub
 }

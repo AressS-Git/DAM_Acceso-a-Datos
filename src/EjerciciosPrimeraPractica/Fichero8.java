@@ -1,4 +1,5 @@
-import java.net.URISyntaxException;
+package EjerciciosPrimeraPractica;
+
 import java.util.Scanner;
 import java.io.File;
 import java.net.URI;

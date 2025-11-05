@@ -1,3 +1,5 @@
+package EjerciciosPrimeraPractica;
+
 import java.io.File;
 
 public class Fichero2 {

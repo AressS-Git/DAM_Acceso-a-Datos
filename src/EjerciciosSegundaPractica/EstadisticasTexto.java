@@ -18,11 +18,13 @@ import java.util.List;
 import java.util.Scanner;
 
 public class EstadisticasTexto {
+    //Variables privadas
     private int numeroLineas;
     private int numeroPalabras;
     private int numeroCaracteres;
     private String palabraMasLarga;
 
+    //Constructor
     public EstadisticasTexto(int numeroLineas, int numeroPalabras, int numeroCaracteres, String palabraMasLarga) {
         this.numeroLineas = numeroLineas;
         this.numeroPalabras = numeroPalabras;
@@ -30,6 +32,7 @@ public class EstadisticasTexto {
         this.palabraMasLarga = palabraMasLarga;
     }
 
+    //Getters y setters
     public int getNumeroLineas() {
         return numeroLineas;
     }
@@ -55,6 +58,7 @@ public class EstadisticasTexto {
         this.palabraMasLarga = palabraMasLarga;
     }
 
+    //Metodo que analiza un archivo y saca info de este
     public static EstadisticasTexto analizarArchivo(String nombreArchivo) throws IOException{
         List<String> palabras = new ArrayList<>();
         File file = new File(nombreArchivo);
@@ -82,6 +86,7 @@ public class EstadisticasTexto {
 
             numeroPalabras = palabras.size();
 
+            //Recorrer palabras para sacar cual es la mas larga
             for(String palabra: palabras) {
                 int longitudPalabra = palabra.length();
                 numeroCaracteres += longitudPalabra;
@@ -94,9 +99,11 @@ public class EstadisticasTexto {
             throw new RuntimeException(e);
         }
         System.out.println("Archivo analizado");
+        //Crear un objeto EstadisticasTexto con todas la info sacada en el metodo
         return new EstadisticasTexto(numeroLineas, numeroPalabras, numeroCaracteres, palabraMasLarga);
     }
 
+    //Metodo que vuelca las estadisticas en un archivo
     public static void guardarEstadisticas(EstadisticasTexto estadisticas, String archivoSalida) {
         File archivoConEStadisticas = new File(archivoSalida);
         System.out.println("Escribiendo estadísticas en: " + archivoConEStadisticas.getAbsolutePath());
@@ -125,6 +132,7 @@ public class EstadisticasTexto {
         }
     }
 
+    //Metodo que ejecuta los metodos anteriores
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         System.out.print("Escribe el nombre del archivo a analizar: ");

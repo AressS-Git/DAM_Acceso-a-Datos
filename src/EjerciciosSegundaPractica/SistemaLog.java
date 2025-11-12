@@ -67,15 +67,18 @@ enum NivelLog {
 }
 
 public class SistemaLog {
+    //Variables del log
     private String archivoLog;
     private long tamanoMaximo; // en bytes
     private int numeroRotacion;
 
+    //Constructor
     public SistemaLog(String archivoLog, long tamanoMaximo) {
         this.archivoLog = archivoLog;
         this.tamanoMaximo = tamanoMaximo;
     }
 
+    //Metodo que guarda el log en el archivo con logs
     public void escribirLog(String mensaje, NivelLog nivel) throws IOException {
         rotarSiEsNecesario();
         LocalDateTime fechaActual = LocalDateTime.now();
@@ -90,8 +93,10 @@ public class SistemaLog {
         }
     }
 
+    //Metodo que aumenta el size del log si es necesario
     private boolean rotarSiEsNecesario() throws IOException{
         long tamanoActual = obtenerTamanoLog();
+        //Comprobar si el size del archivo de logs ha superado el limite establecido
         if(tamanoActual >= tamanoMaximo) {
             System.err.println("El archivo ha superado el tamaño máximo establecido: " + tamanoMaximo);
             File archivoLogActual = new File(this.archivoLog);
@@ -112,6 +117,7 @@ public class SistemaLog {
         }
     }
 
+    //Obtener el size del archivo de logs
     private long obtenerTamanoLog() throws IOException{
         File archivoLogFile = new File(archivoLog);
         if(archivoLogFile.exists() && archivoLogFile.isFile()) {
@@ -121,6 +127,7 @@ public class SistemaLog {
         }
     }
 
+    //Probar el funcionamiento de los metodos en el main
     public static void main(String[] args) throws IOException {
         SistemaLog log = new SistemaLog("app.log", 100);
         log.escribirLog("Aplicación iniciada", NivelLog.INFO);

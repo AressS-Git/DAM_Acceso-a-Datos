@@ -23,6 +23,7 @@ public class Fichero9 {
         mostrarMenu(sc);
     }
 
+    //Metodo que muestra el menu mientras se cumpla la condicion del do-while
     public static void mostrarMenu(Scanner sc) {
         int op = 0;
         do {
@@ -40,7 +41,7 @@ public class Fichero9 {
                 op = sc.nextInt();
                 sc.nextLine();
             } catch (InputMismatchException e) {
-                System.out.println("Entrada inválida. Por favor, introduce un número.");
+                System.err.println("Entrada inválida. Por favor, introduce un número.");
                 sc.nextLine();
                 op = 0;
                 continue;
@@ -53,7 +54,7 @@ public class Fichero9 {
                 case 4: crearArchivo(sc); break;
                 case 5: trabajarConURI(sc); break;
                 case 6: System.out.println("Saliendo del menú"); break;
-                default: System.out.println("El número introducido no es ninguna de las opciones del menú, prueba de nuevo");
+                default: System.err.println("El número introducido no es ninguna de las opciones del menú, prueba de nuevo");
             }
             if (op != 6) {
                 System.out.println("Presiona Enter para continuar...");
@@ -62,20 +63,22 @@ public class Fichero9 {
         } while(op != 6);
     }
 
+    //Metodo que comprueba una ruta, si es un archivo muestra su peso en bytes
     public static void verificarArchivo(Scanner sc) {
-        System.out.print("Introduce la rutra completa al archivo con este incluido: ");
+        System.out.print("Introduce la ruta completa al archivo con este incluido: ");
         String ruta = sc.nextLine();
         File rutaArchivo = new File(ruta);
         if (!rutaArchivo.exists()) {
-            System.out.println("La ruta que has pasado no existe. inténtalo de nuevo");
+            System.err.println("La ruta que has pasado no existe. inténtalo de nuevo");
         } else if (rutaArchivo.isDirectory()) {
-            System.out.println("La ruta que has pasado no es un archivo sino un directorio");
+            System.err.println("La ruta que has pasado no es un archivo sino un directorio");
         } else if (rutaArchivo.isFile()) {
             long pesoArchivoEnBytes = rutaArchivo.length();
             System.out.println("El archivo si existe en la ruta indicada, tiene un peso de " + pesoArchivoEnBytes + " bytes");
         }
     }
 
+    //Metodo que explora un directorio, lista sus elementos y dependiendo de si son archivos o directorios hacen una cosa u otra
     public static void explorarDirectorio(Scanner sc)  {
         System.out.print("Introduce la ruta del directorio que quieras explorar: ");
         String rutaDirectorio = sc.nextLine();
@@ -85,9 +88,11 @@ public class Fichero9 {
             if (elementos != null) {
                 for (String nombreElemento  : elementos) {
                     File elementoEnArray = new File(ruta, nombreElemento);
+                    //Si es un archivo muestra su peso en bytes
                     if (elementoEnArray.isFile()) {
                         long pesoArchivoEnBytes = elementoEnArray.length();
                         System.out.println("Archivo: " + nombreElemento + " [Peso del archivo: " + pesoArchivoEnBytes + " bytes]");
+                    //Si es un directorio muestra la cantidad de elementos que contiene
                     } else if (elementoEnArray.isDirectory()) {
                         String[] subElementos = elementoEnArray.list();
                         int numElementos = subElementos != null ? subElementos.length : 0;
@@ -95,13 +100,14 @@ public class Fichero9 {
                     }
                 }
             } else {
-                System.out.println("No se pudieron listar los contenidos del directorio (posiblemente por falta de permisos).");
+                System.err.println("No se pudieron listar los contenidos del directorio (posiblemente por falta de permisos).");
             }
         } else {
-            System.out.println("La ruta introducida es errónea o no existe en el equipo o no es un directorio");
+            System.err.println("La ruta introducida es errónea o no existe en el equipo o no es un directorio");
         }
     }
 
+    //Crea una carpeta si no existe, crea la ruta entera si es necesario
     public static void crearCarpeta(Scanner sc) {
         System.out.print("Introduce la ruta de la carpeta que quieres crear: ");
         String rutaCarpeta = sc.nextLine();
@@ -110,10 +116,10 @@ public class Fichero9 {
             if(ruta.mkdirs()) {
                 System.out.println("Ruta creada correctamente: " + ruta.getAbsolutePath());
             } else {
-                System.out.println("Error al crear la ruta. Asegúrate de que la carpeta padre existe.");
+                System.err.println("Error al crear la ruta. Asegúrate de que la carpeta padre existe.");
             }
         } else {
-            System.out.println("La ruta ya existe o es un archivo existente");
+            System.err.println("La ruta ya existe o es un archivo existente");
         }
     }
 

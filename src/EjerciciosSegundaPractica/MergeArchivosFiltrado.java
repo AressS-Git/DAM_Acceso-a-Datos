@@ -14,15 +14,20 @@ public class MergeArchivosFiltrado {
      * @return número total de líneas escritas
      * @throws IOException si hay error de lectura/escritura
      */
+    //;etodo que combina dos archivos en uno filtrando lineas si es necesario
     public static int combinarArchivos(File[] archivosEntrada, File archivoSalida, String filtro) throws IOException {
+        //Guardar las lineas a añadir en una lista
         List<String> linesAdded = new ArrayList<>();
         String line;
+        //Recorrer el primer archivo
         try(BufferedReader brFirstFile = new BufferedReader(new FileReader(archivosEntrada[0]))) {
             System.out.println("Procesando el primer archivo: " + archivosEntrada[0].getAbsolutePath());
             while((line = brFirstFile.readLine()) != null) {
                 String cleanLine = line.trim();
                 if(!cleanLine.isEmpty()) {
+                    //Comprobar linea con el metodo cumpleFiltro
                     if(cumpleFiltro(cleanLine, filtro)) {
+                        //Se añade al merge si cumple los filtros
                         linesAdded.add(cleanLine);
                     }
                 }
@@ -30,14 +35,18 @@ public class MergeArchivosFiltrado {
         } catch(IOException e) {
             System.err.println("Error al cargar el archivo " + e.getMessage());
         }
+        //Obtener el numero de lineas que se van a alñadir al merge desde el primer archivo
         int linesSelectedFromFirstFile = linesAdded.size();
         System.out.println("Archivo procesado, líneas añadidas al nuevo archivo: " + linesSelectedFromFirstFile);
+        //Recorrer el segundo archivo
         try(BufferedReader brSecondFile = new BufferedReader(new FileReader(archivosEntrada[1]))) {
             System.out.println("Procesando el segundo archivo: " + archivosEntrada[1].getAbsolutePath());
             while((line = brSecondFile.readLine()) != null) {
                 String cleanLine = line.trim();
                 if(!cleanLine.isEmpty()) {
+                    //Comprobar linea con el metodo cumpleFiltro
                     if(cumpleFiltro(cleanLine, filtro)) {
+                        //Se añade al merge si cumple los filtros
                         linesAdded.add(cleanLine);
                     }
                 }
@@ -45,6 +54,7 @@ public class MergeArchivosFiltrado {
         } catch(IOException e) {
             System.err.println("Error al cargar el archivo " + e.getMessage());
         }
+        //Obtener el numero de lineas que se van a alñadir al merge desde el segundo archivo
         int linesSelectedFromSecondFile = linesAdded.size() - linesSelectedFromFirstFile;
         System.out.println("Archivo procesado, líneas añadidas al nuevo archivo: " + linesSelectedFromSecondFile);
         try(BufferedWriter bw = new BufferedWriter(new FileWriter(archivoSalida))) {
@@ -64,20 +74,24 @@ public class MergeArchivosFiltrado {
      * @param filtro criterio de búsqueda (null = siempre true)
      * @return true si la línea debe incluirse
      */
+    //Metodo que comprueba si una linea cumple los requisitos para posteriormente añadirla al merge
     private static boolean cumpleFiltro(String linea, String filtro) {
         if (filtro == null || filtro.trim().isEmpty()) {
             return true;
         }
+        //Limpiar linea para poder procesarla bien
         String lineaLimpia = linea.trim();
         String[] palabrasDeLaLinea = lineaLimpia.split("\\s+");
         for (String palabra : palabrasDeLaLinea) {
             if (palabra.equals(filtro)) {
+                //La linea cumple el filtro asi que se devuelve true
                 return true;
             }
         }
         return false;
     }
 
+    //Se ejecutan los metodos anteriores en el main para comprobar que funcionan
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         System.out.println("***MERGEADOR DE ARCHIVOS***");
@@ -88,17 +102,19 @@ public class MergeArchivosFiltrado {
         File[] archivosEntrada = {firstFile, secondFile};
         System.out.print("Escribe el nombre del archivo de salida(el archivo dónde se guardará el MERGE): ");
         File outputFile = new File(sc.nextLine());
+        //Comprobar que las rutas introducidas existen y son archivos
         if(firstFile.isFile() && secondFile.isFile() && outputFile.isFile() && firstFile.exists() && secondFile.exists() && outputFile.exists()) {
-            System.out.println("Rutas de los archivos correctass, comenzando el MERGE");
+            System.out.println("Rutas de los archivos corectas, comenzando el MERGE");
             System.out.print("Escribe el filtro que quieres aplicar: ");
             String filter = sc.nextLine();
             try {
+                //Mostrar resultado del merge
                 System.out.println("Resultado de merge: " + combinarArchivos(archivosEntrada, outputFile, filter) + " líneas escritas en: " + outputFile.getAbsolutePath());
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         } else {
-            System.out.println("Error, las rutas son incorrectas o no apuntan a archivos");
+            System.err.println("Error, las rutas son incorrectas o no apuntan a archivos");
         }
     }
 }
